@@ -1,0 +1,7 @@
+task/TaskTrackerApplication.class
+task/core/Task$Status.class
+task/core/Task.class
+task/TaskTrackerConfiguration.class
+task/db/TaskDAO.class
+task/TaskTrackerApplication$1.class
+task/resources/TaskResource.class
