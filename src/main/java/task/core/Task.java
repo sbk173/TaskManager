@@ -1,6 +1,8 @@
 package task.core;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
@@ -14,16 +16,20 @@ import java.time.LocalDate;
 })
 public class Task {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tasks_seq_gen")
+    @SequenceGenerator(name = "tasks_seq_gen", sequenceName = "tasks_SEQ", allocationSize = 1)
     private Long id;
 
-    private String Description;
+    @NotBlank(message = "Description is Mandatory")
+    private String description;
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private Status status = Status.valueOf("TODO");
 
+    @NotNull(message = "Start Date is Mandatory")
     private LocalDate startDate;
 
+    @NotNull(message = "End Date is Mandatory")
     private LocalDate endDate;
 
     public Long getId() {
@@ -32,6 +38,14 @@ public class Task {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Status getStatus() {

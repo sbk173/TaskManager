@@ -1,5 +1,7 @@
 package task;
 
+import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
+import io.dropwizard.configuration.SubstitutingSourceProvider;
 import io.dropwizard.core.Application;
 import io.dropwizard.core.setup.Bootstrap;
 import io.dropwizard.core.setup.Environment;
@@ -30,6 +32,12 @@ public class TaskTrackerApplication extends Application<TaskTrackerConfiguration
     @Override
     public void initialize(final Bootstrap<TaskTrackerConfiguration> bootstrap) {
         // TODO: application initialization
+        bootstrap.setConfigurationSourceProvider(
+                new SubstitutingSourceProvider(
+                        bootstrap.getConfigurationSourceProvider(),
+                        new EnvironmentVariableSubstitutor(false) // 'false' means don't fail on missing variables
+                )
+        );
         bootstrap.addBundle(hibernate);
     }
 
@@ -39,6 +47,7 @@ public class TaskTrackerApplication extends Application<TaskTrackerConfiguration
         // TODO: implement application
         final TaskDAO taskDAO = new TaskDAO(hibernate.getSessionFactory());
         environment.jersey().register(new TaskResource(taskDAO));
+        System.out.println("DB_URL: " + System.getenv("DB_URL"));
     }
 
 }
